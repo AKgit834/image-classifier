@@ -1,9 +1,11 @@
+from django.shortcuts import render
+from all.models import images
 import joblib
 import json
 import numpy as np
 import base64
 import cv2
-from trans_wave import w2d
+import pywt
 
 __model = None
 
@@ -21,6 +23,23 @@ def classify(b64_data=None,file_path=None):
 
         res=__model.predict(final)[0]
     return res
+
+
+def w2d(img, mode='haar', level=1):
+    arr = img
+
+    arr = cv2.cvtColor( arr,cv2.COLOR_RGB2GRAY )
+    arr =  np.float32(arr)
+    arr /= 255
+    coeffs=pywt.wavedec2(arr, mode, level=level)
+    coeffs_H=list(coeffs)
+    coeffs_H[0] *= 0
+
+    arr_h=pywt.waverec2(coeffs_H, mode)
+    arr_h *= 255
+    arr_h =  np.uint8(arr_h)
+
+    return arr_h
 
 
 
@@ -58,3 +77,20 @@ def load_saved_artifacts():
         with open('D:/vs/jupyter/Source_files/Family_classifier/model.pkl', 'rb') as f:
             __model = joblib.load(f)
     print("loading saved artifacts...done")
+
+
+def index(request):
+    if request.method == "POST":
+        img_pth = request.POST.get('path')
+        print(type(img_pth))
+        print(img_pth)
+        # new_img_pth=img_pth.replace(,'/')
+        # print(new_img_pth)
+        load_saved_artifacts()
+        ans=classify(file_path=img_pth)
+        context={
+            'ans':ans
+        }
+
+
+    return render(request,'index.html',context=context)
