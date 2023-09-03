@@ -7,14 +7,43 @@
 <body>
     <form method="POST">
         {% csrf_token %}
-        <label for="img">Enter image path</label>
+        <label for="img">Enter image path with forward slash</label>
         <input type="text" name="path">
         {% comment %} <input class="file-upload-input" type="file" name="img"> {% endcomment %}
         <button type="submit">Submit</button>
     </form>
-    {% if ans %}
+    {% if ans == "aaditya" %}
         <p>
-            {{ ans }}
+            <center>Aaditya
+                <br>
+                <img src="/static/1365554677.jpg" width="200px" height="200px">
+            </center>
+        </p>
+    {% endif %}
+
+    {% if ans == "akshita" %}
+        <p>
+            <center>Didi
+                <br>
+                <img src="/static/20230816_235224.jpg" width="200px" height="200px">
+            </center>
+        </p>
+    {% endif %}
+
+    {% if ans == "mummy" %}
+        <p>
+            <center>Mummy
+                <br>
+                <img src="/static/20230817_164545_002_saved.jpg" width="200px" height="200px">
+            </center>
+        </p>
+    {% endif %}
+    {% if ans == "papa" %}
+        <p>
+            <center>Papa
+                <br>
+                <img src="/static/20230817_164910_005_saved.jpg" width="200px" height="200px">
+            </center>
         </p>
     {% endif %}
 </body>
